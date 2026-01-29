@@ -10,6 +10,9 @@ class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
 
+    const ROLE_USER = 'user';
+    const ROLE_ADMIN = 'admin';
+
     protected $fillable = [
         'name', 'email', 'password',
     ];
@@ -21,6 +24,11 @@ class User extends Authenticatable implements JWTSubject
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function isAdmin()
+    {
+        return $this->role === self::ROLE_ADMIN;
+    }
 
     public function getJWTIdentifier()
     {

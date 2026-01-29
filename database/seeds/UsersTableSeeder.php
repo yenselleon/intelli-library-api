@@ -8,16 +8,18 @@ class UsersTableSeeder extends Seeder
 {
     public function run()
     {
-        User::create([
-            'name' => 'Admin User',
-            'email' => 'admin@intelli-library.com',
-            'password' => Hash::make('password123'),
-        ]);
+        $admin = new User();
+        $admin->name = 'Admin User';
+        $admin->email = 'admin@intelli-library.com';
+        $admin->password = Hash::make('password123');
+        $admin->role = User::ROLE_ADMIN;
+        $admin->save();
 
-        User::create([
-            'name' => 'Test User',
-            'email' => 'test@test.com',
-            'password' => Hash::make('password'),
-        ]);
+        $user = new User();
+        $user->name = 'Test User';
+        $user->email = 'test@test.com';
+        $user->password = Hash::make('password');
+        $user->role = User::ROLE_USER;
+        $user->save();
     }
 }
