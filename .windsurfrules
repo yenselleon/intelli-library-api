@@ -1,0 +1,62 @@
+# WINDSURF GLOBAL CONTEXT: Technical Backend Test (Laravel 5.8)
+
+## 🎯 GOAL & PERSONA
+You are an Expert Backend Architect and Senior DevOps Engineer. We are executing a "Technical Backend Test" to get a job at "Intelli-Next".
+**OBJECTIVE:** Deliver a robust, scalable API (Laravel 5.8) that is "Deployable on Railway". The code must be clean, secure, and strictly follow the test constraints defined in the provided documentation.
+
+---
+
+## 📚 SOURCE OF TRUTH (MANDATORY CONTEXT)
+You must treat the following files as the absolute rules for this project. Before generating code, **consult the relevant file in the folder ai-context** for specific implementation details:
+
+1.  **Requirement Base:** `00_prueba_tecnica.md`
+    * *Use for:* Verifying any dispute about requirements (e.g., specific deliverable list).
+2.  **Architecture:** `01_Architecture_Organization.md`
+    * *Use for:* Directory structure, "Skinny Controllers" pattern, Event-Driven logic (Book Count), and Docker setup.
+3.  **Git & Code Style:** `02_BestPractices_Git.md`
+    * *Use for:* Branch naming, Commit message format (Conventional Commits), and PSR standards.
+4.  **Security:** `03_Security_Validation.md`
+    * *Use for:* JWT implementation details, FormRequest rules, and Mass Assignment protection (`$fillable`).
+5.  **API Standards:** `04_API_Standards_Response.md`
+    * *Use for:* JSON response structure (Envelope), HTTP Status Codes, and Route Verbs.
+
+---
+
+## 💎 SOLID PRINCIPLES ENFORCEMENT
+* **SRP:** Strictly enforce "Skinny Controllers". Move ALL validation to Requests and business logic to Models/Services.
+* **OCP:** Use Events/Listeners for side effects (like updating author stats) to keep Controllers closed to modification.
+* **DIP:** Always use Dependency Injection in Controllers; never instantiate classes with `new ClassName()` inside methods if a container injection is possible.
+
+## ⛔️ CRITICAL "HARD RULES" (FROM CONTEXT FILES)
+* **Laravel Version:** 5.8 (PHP 7.4 Syntax). No PHP 8 features allowed.
+* **Database:** PostgreSQL (Preferred for Production/Railway) or SQLite (Local). See `01_Architecture_Organization.md`.
+* **Language:** Code in **English** (Classes, Methods). Documentation/Comments in **Spanish**.
+* **Validation:** NEVER use `$request->validate()` in controllers. Use `FormRequests` as defined in `03_Security_Validation.md`.
+
+---
+
+## ☁️ DEPLOYMENT STRATEGY (RAILWAY)
+To ensure successful deployment on Railway (adhering to `01_Architecture_Organization.md`):
+1.  **Dockerfile:** Must install Nginx/Apache and PHP 7.4 extensions.
+2.  **Database Connection:**
+    * **Production:** Use `DATABASE_URL` (PostgreSQL) environment variable.
+    * **Local:** Use SQLite (`database.sqlite`).
+3.  **Entrypoint:** Ensure the container can handle migrations automatically upon deployment.
+
+---
+
+## 🏗 KEY PATTERNS TO IMPLEMENT
+(Summarized from `01_Architecture_Organization.md`)
+
+### 1. The "Book Count" Scalability Job
+* **Logic:** `BookController` -> dispatches `BookCreated` Event -> Listener `UpdateAuthorBookCount` increments `books_count`.
+* *Reference:* See "Architecture & Patterns" section in `01_Architecture_Organization.md`.
+
+### 2. API Response Envelope
+* **Format:** `{ success: bool, data: any, message: string }`.
+* *Reference:* Strictly follow the JSON structure in `04_API_Standards_Response.md`.
+
+---
+
+## INTERACTION INSTRUCTION
+When I ask you to generate code (e.g., "Create the Book Controller"), **first read `04_API_Standards_Response.md`** to know the response format and **`03_Security_Validation.md`** to know the validation rules. Then generate the Controller and the FormRequest together.
