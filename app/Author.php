@@ -9,6 +9,7 @@ class Author extends Model
     protected $fillable = [
         'name',
         'surname',
+        'books_count',
     ];
 
     public function books()
