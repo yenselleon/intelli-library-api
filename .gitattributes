@@ -1,5 +1,5 @@
+# Forzar fines de línea LF para scripts de shell, independientemente del SO
+*.sh text eol=lf
+
+# Configuración por defecto para otros archivos
 * text=auto
-*.css linguist-vendored
-*.scss linguist-vendored
-*.js linguist-vendored
-CHANGELOG.md export-ignore

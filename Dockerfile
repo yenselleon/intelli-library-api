@@ -51,6 +51,7 @@ RUN chmod -R 775 /var/www/storage /var/www/bootstrap/cache 2>/dev/null || true
 
 # Copiar script de inicio
 COPY docker/startup.sh /usr/local/bin/startup.sh
+RUN sed -i 's/\r$//' /usr/local/bin/startup.sh
 RUN chmod +x /usr/local/bin/startup.sh
 
 # Exponer puerto
