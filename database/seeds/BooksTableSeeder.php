@@ -62,5 +62,14 @@ class BooksTableSeeder extends Seeder
                 'published_year' => 2002,
             ]);
         }
+
+        $this->syncAuthorBookCounts();
+    }
+
+    private function syncAuthorBookCounts()
+    {
+        Author::all()->each(function ($author) {
+            $author->update(['books_count' => $author->books()->count()]);
+        });
     }
 }

@@ -31,3 +31,14 @@ Route::middleware(['auth:api', 'throttle:60,1', 'role:admin'])->group(function (
     Route::put('authors/{author}', 'AuthorController@update');
     Route::delete('authors/{author}', 'AuthorController@destroy');
 });
+
+Route::middleware(['auth:api', 'throttle:60,1'])->group(function () {
+    Route::get('books', 'BookController@index');
+    Route::get('books/{book}', 'BookController@show');
+});
+
+Route::middleware(['auth:api', 'throttle:60,1', 'role:admin'])->group(function () {
+    Route::post('books', 'BookController@store');
+    Route::put('books/{book}', 'BookController@update');
+    Route::delete('books/{book}', 'BookController@destroy');
+});
