@@ -42,3 +42,7 @@ Route::middleware(['auth:api', 'throttle:60,1', 'role:admin'])->group(function (
     Route::put('books/{book}', 'BookController@update');
     Route::delete('books/{book}', 'BookController@destroy');
 });
+
+Route::middleware(['auth:api', 'throttle:60,1', 'role:admin'])->group(function () {
+    Route::get('reports/export', 'ReportController@export');
+});
