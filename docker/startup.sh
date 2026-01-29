@@ -1,6 +1,12 @@
 #!/bin/sh
 
-# 1. Crear archivo de base de datos si no existe
+# 1. Instalar dependencias si no existen (Primera vez)
+if [ ! -d "/var/www/vendor" ]; then
+    echo "Vendor directory not found. Installing dependencies..."
+    composer install --no-interaction --optimize-autoloader --no-dev
+fi
+
+# 2. Crear archivo de base de datos si no existe
 if [ ! -f /var/www/database/database.sqlite ]; then
     echo "Creating database.sqlite..."
     touch /var/www/database/database.sqlite
