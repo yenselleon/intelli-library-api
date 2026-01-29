@@ -49,8 +49,12 @@ COPY --chown=$user:$user . /var/www
 RUN chown -R $user:www-data /var/www/storage /var/www/bootstrap/cache 2>/dev/null || true
 RUN chmod -R 775 /var/www/storage /var/www/bootstrap/cache 2>/dev/null || true
 
+# Copiar script de inicio
+COPY docker/startup.sh /usr/local/bin/startup.sh
+RUN chmod +x /usr/local/bin/startup.sh
+
 # Exponer puerto
 EXPOSE 80
 
 # Comando de inicio
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+CMD ["/usr/local/bin/startup.sh"]

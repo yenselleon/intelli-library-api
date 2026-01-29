@@ -1,72 +1,137 @@
-<p align="center"><img src="https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg" width="400"></p>
+# Intelli Library API
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+API REST para gestión de biblioteca desarrollada con Laravel 5.8.
 
-## About Laravel
+## Tecnologías
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Framework:** Laravel 5.8
+- **PHP:** 7.4
+- **Base de Datos:** SQLite (desarrollo) / PostgreSQL (producción)
+- **Autenticación:** JWT (tymon/jwt-auth)
+- **Contenedores:** Docker + Docker Compose
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Instalación Rápida (Docker)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+```bash
+# 1. Clonar el repositorio
+git clone <repo-url>
+cd intelli-library-api
 
-## Learning Laravel
+# 2. Instalar dependencias de Composer
+docker run --rm -v $(pwd):/var/www -w /var/www composer:2.2 install --ignore-platform-reqs
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+# 3. Iniciar la aplicación
+docker-compose up -d
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+# 4. ¡Listo! La API estará disponible en:
+# http://localhost:8000
+```
 
-## Laravel Sponsors
+> **Nota:** El contenedor automáticamente:
+> - Crea el archivo `.env` desde `.env.example`
+> - Genera `APP_KEY` y `JWT_SECRET`
+> - Crea la base de datos SQLite
+> - Ejecuta las migraciones y seeders
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+## Credenciales de Prueba
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
-- [We Are The Robots Inc.](https://watr.mx/)
-- [Understand.io](https://www.understand.io/)
-- [Abdel Elrafa](https://abdelelrafa.com)
-- [Hyper Host](https://hyper.host)
+| Usuario | Email | Password | Role |
+|---------|-------|----------|------|
+| Admin | admin@intelli-library.com | password123 | admin |
+| User | test@test.com | password | user |
 
-## Contributing
+## Endpoints de Autenticación
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+| Método | Endpoint | Descripción | Acceso |
+|--------|----------|-------------|--------|
+| POST | `/api/auth/login` | Iniciar sesión | Público |
+| POST | `/api/auth/register` | Registrar usuario | Público |
+| GET | `/api/auth/me` | Usuario autenticado | Autenticado |
+| POST | `/api/auth/logout` | Cerrar sesión | Autenticado |
+| POST | `/api/auth/refresh` | Renovar token | Autenticado |
 
-## Security Vulnerabilities
+## Endpoints de Usuarios (Solo Admin)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| GET | `/api/users` | Listar usuarios |
+| DELETE | `/api/users/{id}` | Eliminar usuario |
 
-## License
+## Ejemplo de Uso
 
-The Laravel framework is open-source software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### Login
+```bash
+curl -X POST http://localhost:8000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@intelli-library.com","password":"password123"}'
+```
+
+### Respuesta
+```json
+{
+  "success": true,
+  "data": {
+    "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
+    "token_type": "bearer",
+    "expires_in": 3600
+  },
+  "message": "Login successful"
+}
+```
+
+### Usar Token
+```bash
+curl -X GET http://localhost:8000/api/auth/me \
+  -H "Authorization: Bearer {token}"
+```
+
+## Comandos Útiles
+
+```bash
+# Ver logs del contenedor
+docker-compose logs -f app
+
+# Ejecutar comandos artisan
+docker-compose exec app php artisan migrate:status
+
+# Limpiar cache
+docker-compose exec app php artisan cache:clear
+
+# Reiniciar base de datos
+docker-compose exec app php artisan migrate:fresh --seed
+```
+
+## Estructura del Proyecto
+
+```
+app/
+├── Http/
+│   ├── Controllers/
+│   │   ├── AuthController.php      # Autenticación JWT
+│   │   └── UserController.php      # CRUD Usuarios
+│   ├── Middleware/
+│   │   └── CheckRole.php           # Verificación de roles
+│   └── Requests/
+│       ├── LoginRequest.php        # Validación login
+│       └── RegisterUserRequest.php # Validación registro
+├── Exceptions/
+│   └── Handler.php                 # Manejo de errores JSON
+└── User.php                        # Modelo con roles
+```
+
+## Códigos de Respuesta HTTP
+
+| Código | Significado |
+|--------|-------------|
+| 200 | Operación exitosa |
+| 201 | Recurso creado |
+| 401 | No autenticado |
+| 403 | Sin permisos |
+| 404 | No encontrado |
+| 422 | Error de validación |
+| 429 | Demasiadas peticiones |
+| 500 | Error del servidor |
+
+## Licencia
+
+MIT
