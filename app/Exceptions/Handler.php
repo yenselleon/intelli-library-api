@@ -13,6 +13,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use InvalidArgumentException;
 
 class Handler extends ExceptionHandler
 {
@@ -80,6 +81,10 @@ class Handler extends ExceptionHandler
 
         if ($exception instanceof MethodNotAllowedHttpException) {
             return $this->errorResponse(405, 'Method not allowed for this endpoint');
+        }
+
+        if ($exception instanceof InvalidArgumentException && strpos($exception->getMessage(), 'Route') !== false) {
+            return $this->errorResponse(401, 'Unauthenticated');
         }
 
         if ($exception instanceof HttpException) {
